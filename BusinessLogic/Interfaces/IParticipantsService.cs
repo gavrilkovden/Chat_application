@@ -10,5 +10,7 @@ namespace BusinessLogic.Interfaces
     public interface IParticipantsService
     {
         IEnumerable<ParticipantsDTO> GetChatParticipants(int chatId);
+        ParticipantsDTO ConnectToChat(int chatId, int userId);
+        public bool LeaveChat(int chatId, int userId);
     }
 }

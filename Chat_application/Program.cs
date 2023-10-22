@@ -3,12 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using DataAccessLayer.EntityDB;
 using BusinessLogic.Interfaces;
 using BusinessLogic.Services;
+using Chat_application;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddJsonFile("appsettings.json");
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddSingleton(new Context(connectionString));
+builder.Services.AddDbContext<Context>(options => { options.UseSqlServer(connectionString); });
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<IChatService, ChatService>();
@@ -20,6 +21,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -30,6 +32,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.MapControllers();
 

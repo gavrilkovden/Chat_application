@@ -24,7 +24,7 @@ namespace BusinessLogic.Services
         {
             if (string.IsNullOrEmpty(name))
             {
-                throw new ArgumentException("Invalid input parameters.");
+                throw new InvalidInputException("Invalid input parameters.");
             }
             // checking whether a user with the same name exists
             var existingUser = _context.DALUser.FirstOrDefault(u => u.UserName == name);
@@ -57,7 +57,7 @@ namespace BusinessLogic.Services
         {
             if (userId <= 0)
             {
-                throw new ArgumentException("Invalid input parameters.");
+                throw new InvalidInputException("Invalid input parameters.");
             }
             // search for a user by his ID
             var userEntity = _context.DALUser.FirstOrDefault(u => u.Id == userId);
@@ -78,7 +78,7 @@ namespace BusinessLogic.Services
             // Query all users from the database
             var users = _context.DALUser.ToList();
 
-            if (users == null)
+            if (users.Count == 0)
             {
                 throw new NotFoundException("Users not found");
             }
@@ -96,7 +96,7 @@ namespace BusinessLogic.Services
         {
             if (userId <= 0)
             {
-                throw new ArgumentException("Invalid input parameters.");
+                throw new InvalidInputException("Invalid input parameters.");
             }
 
             //  query to the database to search for a user by his ID

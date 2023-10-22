@@ -1,6 +1,7 @@
 ﻿using BusinessLogic.DTO;
 using BusinessLogic.Exceptions;
 using BusinessLogic.Interfaces;
+using BusinessLogic.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Chat_application.Controllers
@@ -15,27 +16,36 @@ namespace Chat_application.Controllers
         {
             _participantsService = participantsService;
         }
+
+        [HttpPost]
+        public ActionResult<ChatDTO> ConnectToChat(int chatId, int userId)
+        {
+            var chatDTO = _participantsService.ConnectToChat(chatId, userId);
+            return Ok(chatDTO); 
+        }
+
         // GET: getting all participants for the selected chat
         [HttpGet("chat/{chatId}")]
         public IActionResult GetChatParticipants(int chatId)
         {
-            try
-            {
                 var participants = _participantsService.GetChatParticipants(chatId);
                 return Ok(participants);
-            }
-            catch (ArgumentException ex)
+        }
+
+        [HttpDelete]
+        public IActionResult DisconnectingfromСhat(int chatId, int userId)
+        {
+            bool success = _participantsService.LeaveChat(chatId, userId);
+            if (success)
             {
-                return BadRequest(ex.Message);
+                return Ok(); 
             }
-            catch (NotFoundException ex)
+            else
             {
-                return StatusCode(404, ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
+                return BadRequest("Unable to disconnect from the chat."); 
             }
         }
+
+
     }
 }

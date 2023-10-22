@@ -6,12 +6,6 @@ namespace DataAccessLayer.EntityDB
 {
     public class Context : DbContext
     {
-        private readonly string _connectionString;
-
-        public Context(string connectionString)
-        {
-            _connectionString = connectionString;
-        }
 
         public Context(DbContextOptions<Context> options) : base(options) { }
 
@@ -23,9 +17,6 @@ namespace DataAccessLayer.EntityDB
         public virtual DbSet<UserEntity> DALUser { get; set; }
         
         public virtual DbSet<ParticipantsEntity> DALParticipants { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        { optionsBuilder.UseSqlServer(_connectionString); }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

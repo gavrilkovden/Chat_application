@@ -23,7 +23,7 @@ namespace BusinessLogic.Services
         {
             if (string.IsNullOrEmpty(content) || participantId <= 0)
             {
-                throw new ArgumentException("Invalid input parameters.");
+                throw new InvalidInputException("Invalid input parameters.");
             }
             var messageEntity = new MessageEntity
             {
@@ -49,7 +49,7 @@ namespace BusinessLogic.Services
         {
             if (messageId <= 0)
             {
-                throw new ArgumentException("Invalid input parameters.");
+                throw new InvalidInputException("Invalid input parameters.");
             }
             //  receive a message with the specified identifier
             var messageEntity = _context.DALMessage.FirstOrDefault(m => m.Id == messageId);
@@ -74,7 +74,7 @@ namespace BusinessLogic.Services
         {
             if (chatId <= 0)
             {
-                throw new ArgumentException("Invalid input parameters.");
+                throw new InvalidInputException("Invalid input parameters.");
             }
             var messages = _context.DALParticipants
                 .Where(p => p.ChatId == chatId)
@@ -101,7 +101,7 @@ namespace BusinessLogic.Services
         {
             if (messageId <= 0 || participantId <= 0)
             {
-                throw new ArgumentException("Invalid input parameters.");
+                throw new InvalidInputException("Invalid input parameters.");
             }
             // search for a message with the specified ID
             var messageEntity = _context.DALMessage.FirstOrDefault(m => m.Id == messageId);
