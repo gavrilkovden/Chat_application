@@ -1,48 +1,23 @@
 ﻿using BusinessLogic.DTO;
-using BusinessLogic.Exceptions;
 using BusinessLogic.Interfaces;
 using DataAccessLayer.EntityDB;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using DataAccessLayer.Repository;
+using DataAccessLayer.Repository.generic;
 
 namespace BusinessLogic.Services
 {
     public class UserService : IUserService
     {
-        private readonly Context _context; 
+        private readonly IUserRepository _userRepository;
 
-        public UserService(Context context)
+        public UserService(IUserRepository userRepository)
         {
-            _context = context;
+            _userRepository = userRepository;
         }
 
         public UserDTO CreateUser(string name)
         {
-            if (string.IsNullOrEmpty(name))
-            {
-                throw new InvalidInputException("Invalid input parameters.");
-            }
-            // checking whether a user with the same name exists
-            var existingUser = _context.DALUser.FirstOrDefault(u => u.UserName == name);
-
-            if (existingUser != null)
-            {
-                throw new Exception("User with the same name already exists.");
-            }
-
-            // Creating a new user
-            var newUser = new UserEntity
-            {
-                UserName = name
-            };
-
-            // Adding a user to the database context
-            _context.DALUser.Add(newUser);
-            _context.SaveChanges();
+        var newUser = _userRepository.Create( new UserEntity { UserName = name });
 
             //Creating a UserDTO based on a new user
             var userDTO = new UserDTO
@@ -55,34 +30,12 @@ namespace BusinessLogic.Services
         }
         public bool DeleteUser(int userId)
         {
-            if (userId <= 0)
-            {
-                throw new InvalidInputException("Invalid input parameters.");
-            }
-            // search for a user by his ID
-            var userEntity = _context.DALUser.FirstOrDefault(u => u.Id == userId);
-
-            if (userEntity == null)
-            {
-                return false;
-            }
-
-            _context.DALUser.Remove(userEntity);
-            _context.SaveChanges();
-
-            return true;
+            return _userRepository.DeleteUser(userId);
         }
 
         public IEnumerable<UserDTO> GetAllUsers()
         {
-            // Query all users from the database
-            var users = _context.DALUser.ToList();
-
-            if (users.Count == 0)
-            {
-                throw new NotFoundException("Users not found");
-            }
-
+          var users = _userRepository.GetAll();
             var userDTOs = users.Select(userEntity => new UserDTO
             {
                 Id = userEntity.Id,
@@ -94,20 +47,9 @@ namespace BusinessLogic.Services
 
         public UserDTO GetUserById(int userId)
         {
-            if (userId <= 0)
-            {
-                throw new InvalidInputException("Invalid input parameters.");
-            }
+            var userEntity = _userRepository.GetById(userId);
 
-            //  query to the database to search for a user by his ID
-            var userEntity = _context.DALUser.FirstOrDefault(u => u.Id == userId);
-
-            if (userEntity == null)
-            {
-                throw new NotFoundException("Users not found");
-            }
-
-            var userDTO = new UserDTO
+             var userDTO = new UserDTO
             {
                 Id = userEntity.Id,
                 UserName = userEntity.UserName,

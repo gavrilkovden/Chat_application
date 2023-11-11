@@ -1,12 +1,6 @@
 ﻿using BusinessLogic.DTO;
-using BusinessLogic.Exceptions;
 using BusinessLogic.Interfaces;
 using DataAccessLayer.EntityDB;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BusinessLogic.Services
 {
@@ -23,7 +17,7 @@ namespace BusinessLogic.Services
         {
             if (string.IsNullOrEmpty(content) || participantId <= 0)
             {
-                throw new InvalidInputException("Invalid input parameters.");
+          //      throw new InvalidInputException("Invalid input parameters.");
             }
             var messageEntity = new MessageEntity
             {
@@ -31,7 +25,7 @@ namespace BusinessLogic.Services
                 ParticipantId = participantId 
             };
 
-            _context.DALMessage.Add(messageEntity);
+            _context.Message.Add(messageEntity);
             _context.SaveChanges();
 
             var messageDTO = new MessageDTO
@@ -49,14 +43,14 @@ namespace BusinessLogic.Services
         {
             if (messageId <= 0)
             {
-                throw new InvalidInputException("Invalid input parameters.");
+         //       throw new InvalidInputException("Invalid input parameters.");
             }
             //  receive a message with the specified identifier
-            var messageEntity = _context.DALMessage.FirstOrDefault(m => m.Id == messageId);
+            var messageEntity = _context.Message.FirstOrDefault(m => m.Id == messageId);
 
             if (messageEntity == null)
             {
-                throw new NotFoundException("Message not found");
+          //      throw new NotFoundException("Message not found");
             }
 
             var messageDTO = new MessageDTO
@@ -74,9 +68,9 @@ namespace BusinessLogic.Services
         {
             if (chatId <= 0)
             {
-                throw new InvalidInputException("Invalid input parameters.");
+       //         throw new InvalidInputException("Invalid input parameters.");
             }
-            var messages = _context.DALParticipants
+            var messages = _context.Participants
                 .Where(p => p.ChatId == chatId)
                 .SelectMany(p => p.Messages)
                 .OrderBy(m => m.Timestamp)
@@ -84,7 +78,7 @@ namespace BusinessLogic.Services
 
             if (messages == null)
             {
-                throw new NotFoundException("Messages not found");
+        //        throw new NotFoundException("Messages not found");
             }
             var messageDTOs = messages.Select(messageEntity => new MessageDTO
             {
@@ -101,10 +95,10 @@ namespace BusinessLogic.Services
         {
             if (messageId <= 0 || participantId <= 0)
             {
-                throw new InvalidInputException("Invalid input parameters.");
+          //      throw new InvalidInputException("Invalid input parameters.");
             }
             // search for a message with the specified ID
-            var messageEntity = _context.DALMessage.FirstOrDefault(m => m.Id == messageId);
+            var messageEntity = _context.Message.FirstOrDefault(m => m.Id == messageId);
 
             if (messageEntity == null)
             {
@@ -116,7 +110,7 @@ namespace BusinessLogic.Services
             {
                 return false;
             }
-            _context.DALMessage.Remove(messageEntity);
+            _context.Message.Remove(messageEntity);
             _context.SaveChanges();
 
             return true;

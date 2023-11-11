@@ -10,13 +10,13 @@ namespace DataAccessLayer.EntityDB
         public Context(DbContextOptions<Context> options) : base(options) { }
 
 
-        public virtual DbSet<ChatEntity> DALChat { get; set; }
+        public virtual DbSet<ChatEntity> Chat { get; set; }
 
-        public virtual DbSet<MessageEntity> DALMessage { get; set; }
+        public virtual DbSet<MessageEntity> Message { get; set; }
 
-        public virtual DbSet<UserEntity> DALUser { get; set; }
+        public virtual DbSet<UserEntity> User { get; set; }
         
-        public virtual DbSet<ParticipantsEntity> DALParticipants { get; set; }
+        public virtual DbSet<ParticipantsEntity> Participants { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -43,6 +43,7 @@ namespace DataAccessLayer.EntityDB
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Id).HasColumnType("int");
                 entity.Property(e => e.UserName).HasColumnType("nvarchar(50)");
+                entity.HasIndex(e => e.UserName).IsUnique(); // Создание уникального индекса
                 entity.ToTable("User");
             });
 

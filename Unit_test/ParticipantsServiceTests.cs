@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using BusinessLogic.Services;
-using DataAccessLayer.EntityDB;
+﻿using BusinessLogic.Services;
+using ExceptionHandling.EntityDB;
 using Microsoft.EntityFrameworkCore;
 using Moq;
-using Xunit;
-using BusinessLogic.Exceptions;
-using BusinessLogic.DTO;
+using ExceptionHandling.Exceptions;
 
 namespace Unit_test
 {
@@ -40,7 +32,7 @@ namespace Unit_test
             participantsDbSetMock.As<IQueryable<ParticipantsEntity>>().Setup(m => m.ElementType).Returns(participantsData.AsQueryable().ElementType);
             participantsDbSetMock.As<IQueryable<ParticipantsEntity>>().Setup(m => m.GetEnumerator()).Returns(participantsData.GetEnumerator());
 
-            contextMock.Setup(c => c.DALParticipants).Returns(participantsDbSetMock.Object);
+            contextMock.Setup(c => c.Participants).Returns(participantsDbSetMock.Object);
 
             var participantsService = new ParticipantsService(contextMock.Object);
 
@@ -65,7 +57,7 @@ namespace Unit_test
             var participantsService = new ParticipantsService(contextMock.Object);
 
             // Act and Assert
-            Assert.Throws<InvalidInputException>(() => participantsService.GetChatParticipants(chatId));
+            Assert.Throws<ChatInvalidInputException>(() => participantsService.GetChatParticipants(chatId));
         }
 
         [Fact]
@@ -114,9 +106,9 @@ namespace Unit_test
             participantsDbSetMock.As<IQueryable<ParticipantsEntity>>().Setup(m => m.ElementType).Returns(participantsData.AsQueryable().ElementType);
             participantsDbSetMock.As<IQueryable<ParticipantsEntity>>().Setup(m => m.GetEnumerator()).Returns(participantsData.GetEnumerator());
 
-            contextMock.Setup(c => c.DALParticipants).Returns(participantsDbSetMock.Object);
-            contextMock.Setup(c => c.DALUser).Returns(userDbSetMock.Object);
-            contextMock.Setup(c => c.DALChat).Returns(chatDbSetMock.Object);
+            contextMock.Setup(c => c.Participants).Returns(participantsDbSetMock.Object);
+            contextMock.Setup(c => c.User).Returns(userDbSetMock.Object);
+            contextMock.Setup(c => c.Chat).Returns(chatDbSetMock.Object);
             var participantsService = new ParticipantsService(contextMock.Object);
 
             // Act
@@ -175,14 +167,14 @@ namespace Unit_test
             participantsDbSetMock.As<IQueryable<ParticipantsEntity>>().Setup(m => m.ElementType).Returns(participantsData.AsQueryable().ElementType);
             participantsDbSetMock.As<IQueryable<ParticipantsEntity>>().Setup(m => m.GetEnumerator()).Returns(participantsData.GetEnumerator());
 
-            contextMock.Setup(c => c.DALParticipants).Returns(participantsDbSetMock.Object);
-            contextMock.Setup(c => c.DALUser).Returns(userDbSetMock.Object);
-            contextMock.Setup(c => c.DALChat).Returns(chatDbSetMock.Object);
+            contextMock.Setup(c => c.Participants).Returns(participantsDbSetMock.Object);
+            contextMock.Setup(c => c.User).Returns(userDbSetMock.Object);
+            contextMock.Setup(c => c.Chat).Returns(chatDbSetMock.Object);
             var participantsService = new ParticipantsService(contextMock.Object);
 
             // Act and Assert
 
-            Assert.Throws<NotFoundException>(() => participantsService.ConnectToChat(chatId, userId));
+            Assert.Throws<ChatNotFoundException>(() => participantsService.ConnectToChat(chatId, userId));
 
         }
         [Fact]
@@ -232,9 +224,9 @@ namespace Unit_test
             participantsDbSetMock.As<IQueryable<ParticipantsEntity>>().Setup(m => m.ElementType).Returns(participantsData.AsQueryable().ElementType);
             participantsDbSetMock.As<IQueryable<ParticipantsEntity>>().Setup(m => m.GetEnumerator()).Returns(participantsData.GetEnumerator());
 
-            contextMock.Setup(c => c.DALParticipants).Returns(participantsDbSetMock.Object);
-            contextMock.Setup(c => c.DALUser).Returns(userDbSetMock.Object);
-            contextMock.Setup(c => c.DALChat).Returns(chatDbSetMock.Object);
+            contextMock.Setup(c => c.Participants).Returns(participantsDbSetMock.Object);
+            contextMock.Setup(c => c.User).Returns(userDbSetMock.Object);
+            contextMock.Setup(c => c.Chat).Returns(chatDbSetMock.Object);
             var participantsService = new ParticipantsService(contextMock.Object);
 
             // Act and Assert
@@ -288,13 +280,13 @@ namespace Unit_test
             participantsDbSetMock.As<IQueryable<ParticipantsEntity>>().Setup(m => m.ElementType).Returns(participantsData.AsQueryable().ElementType);
             participantsDbSetMock.As<IQueryable<ParticipantsEntity>>().Setup(m => m.GetEnumerator()).Returns(participantsData.GetEnumerator());
 
-            contextMock.Setup(c => c.DALParticipants).Returns(participantsDbSetMock.Object);
-            contextMock.Setup(c => c.DALUser).Returns(userDbSetMock.Object);
-            contextMock.Setup(c => c.DALChat).Returns(chatDbSetMock.Object);
+            contextMock.Setup(c => c.Participants).Returns(participantsDbSetMock.Object);
+            contextMock.Setup(c => c.User).Returns(userDbSetMock.Object);
+            contextMock.Setup(c => c.Chat).Returns(chatDbSetMock.Object);
             var participantsService = new ParticipantsService(contextMock.Object);
 
             // Act and Assert
-            Assert.Throws<NotFoundException>(() => participantsService.LeaveChat(chatId, userId));
+            Assert.Throws<ChatNotFoundException>(() => participantsService.LeaveChat(chatId, userId));
         }
     }
 }

@@ -1,12 +1,9 @@
 using BusinessLogic.DTO;
-using BusinessLogic.Interfaces;
 using BusinessLogic.Services;
 using Chat_application.Controllers;
-using Chat_application.Models;
 using DataAccessLayer.EntityDB;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Moq;
 
 namespace IntegrationTests
 {
@@ -31,8 +28,8 @@ namespace IntegrationTests
                 var userEntity1 = new UserEntity { Id = 1, UserName = "User 1" };
                 var userEntity2 = new UserEntity { Id = 2, UserName = "User 2" };
 
-                context.DALChat.AddRange(chatEntity1, chatEntity2);
-                context.DALUser.AddRange(userEntity1, userEntity2);
+                context.Chat.AddRange(chatEntity1, chatEntity2);
+                context.User.AddRange(userEntity1, userEntity2);
                 context.SaveChanges();
             }
         }

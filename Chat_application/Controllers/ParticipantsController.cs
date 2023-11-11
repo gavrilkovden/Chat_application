@@ -1,7 +1,5 @@
 ﻿using BusinessLogic.DTO;
-using BusinessLogic.Exceptions;
 using BusinessLogic.Interfaces;
-using BusinessLogic.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Chat_application.Controllers

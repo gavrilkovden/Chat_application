@@ -1,5 +1,4 @@
 ﻿using BusinessLogic.DTO;
-using BusinessLogic.Exceptions;
 using BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 

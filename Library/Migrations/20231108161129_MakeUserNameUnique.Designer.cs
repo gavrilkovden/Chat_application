@@ -9,20 +9,20 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ExceptionHandling.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20231011130032_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20231108161129_MakeUserNameUnique")]
+    partial class MakeUserNameUnique
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.11")
+                .HasAnnotation("ProductVersion", "7.0.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("DataAccessLayer.EntityDB.ChatEntity", b =>
+            modelBuilder.Entity("ExceptionHandling.EntityDB.ChatEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -39,7 +39,7 @@ namespace ExceptionHandling.Migrations
                     b.ToTable("Chat", (string)null);
                 });
 
-            modelBuilder.Entity("DataAccessLayer.EntityDB.MessageEntity", b =>
+            modelBuilder.Entity("ExceptionHandling.EntityDB.MessageEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -64,7 +64,7 @@ namespace ExceptionHandling.Migrations
                     b.ToTable("Message", (string)null);
                 });
 
-            modelBuilder.Entity("DataAccessLayer.EntityDB.ParticipantsEntity", b =>
+            modelBuilder.Entity("ExceptionHandling.EntityDB.ParticipantsEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -91,7 +91,7 @@ namespace ExceptionHandling.Migrations
                     b.ToTable("Participants", (string)null);
                 });
 
-            modelBuilder.Entity("DataAccessLayer.EntityDB.UserEntity", b =>
+            modelBuilder.Entity("ExceptionHandling.EntityDB.UserEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -105,12 +105,15 @@ namespace ExceptionHandling.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UserName")
+                        .IsUnique();
+
                     b.ToTable("User", (string)null);
                 });
 
-            modelBuilder.Entity("DataAccessLayer.EntityDB.MessageEntity", b =>
+            modelBuilder.Entity("ExceptionHandling.EntityDB.MessageEntity", b =>
                 {
-                    b.HasOne("DataAccessLayer.EntityDB.ParticipantsEntity", "Participant")
+                    b.HasOne("ExceptionHandling.EntityDB.ParticipantsEntity", "Participant")
                         .WithMany("Messages")
                         .HasForeignKey("ParticipantId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -119,15 +122,15 @@ namespace ExceptionHandling.Migrations
                     b.Navigation("Participant");
                 });
 
-            modelBuilder.Entity("DataAccessLayer.EntityDB.ParticipantsEntity", b =>
+            modelBuilder.Entity("ExceptionHandling.EntityDB.ParticipantsEntity", b =>
                 {
-                    b.HasOne("DataAccessLayer.EntityDB.ChatEntity", "Chat")
+                    b.HasOne("ExceptionHandling.EntityDB.ChatEntity", "Chat")
                         .WithMany()
                         .HasForeignKey("ChatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DataAccessLayer.EntityDB.UserEntity", "User")
+                    b.HasOne("ExceptionHandling.EntityDB.UserEntity", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -138,7 +141,7 @@ namespace ExceptionHandling.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("DataAccessLayer.EntityDB.ParticipantsEntity", b =>
+            modelBuilder.Entity("ExceptionHandling.EntityDB.ParticipantsEntity", b =>
                 {
                     b.Navigation("Messages");
                 });

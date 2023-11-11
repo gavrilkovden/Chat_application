@@ -1,4 +1,5 @@
-﻿using BusinessLogic.Exceptions;
+﻿
+using ExceptionHandling.Exceptions;
 using Newtonsoft.Json;
 using System.Net;
 
@@ -19,7 +20,7 @@ namespace Chat_application
             {
                 await _next(context);
             }
-            catch (InvalidInputException ex)
+            catch (ChatInvalidInputException ex)
             {
                 context.Response.ContentType = "application/json";
                 context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
@@ -27,7 +28,7 @@ namespace Chat_application
                 var errorMessage = ex.Message;
                 await context.Response.WriteAsync(errorMessage);
             }
-            catch (NotFoundException ex)
+            catch (ChatNotFoundException ex)
             {
                 context.Response.ContentType = "application/json";
                 context.Response.StatusCode = (int)HttpStatusCode.NotFound;
