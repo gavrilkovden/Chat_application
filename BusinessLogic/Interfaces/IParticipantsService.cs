@@ -12,5 +12,6 @@ namespace BusinessLogic.Interfaces
         IEnumerable<ParticipantsDTO> GetChatParticipants(int chatId);
         ParticipantsDTO ConnectToChat(int chatId, int userId);
         public bool LeaveChat(int chatId, int userId);
+     //   public ParticipantsDTO GetParticipantId(int id);
     }
 }

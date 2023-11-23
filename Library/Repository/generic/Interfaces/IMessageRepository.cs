@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Repository.generic
 {
-    public interface IUserRepository: IRepository<UserEntity>
+    public interface IMessageRepository : IRepository<MessageEntity>
     {
-        bool DeleteUser(int userId);
+     //   IEnumerable<MessageEntity> GetMessageChatById (int chatId);
+        bool DeleteMessage(int messageId, int currentUserId);
     }
 }

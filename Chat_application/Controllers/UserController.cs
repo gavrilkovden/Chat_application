@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Chat_application.Controllers
 {
     [ApiController]
-    [Route("api/User")]
+    [Route("api/Users")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -19,30 +19,30 @@ namespace Chat_application.Controllers
             _jwtTokenService = jwtTokenService;
         }
 
-        [AllowAnonymous]
-        [HttpPost("register")]
-        public ActionResult<string> Register([FromBody] string name)
-        {
-            // Создайте пользователя и добавьте его в базу данных
-            var newUser = _userService.CreateUser(name);
+        //[AllowAnonymous]
+        //[HttpPost("register")]
+        //public ActionResult<string> Register([FromBody] string name)
+        //{
+        //    // Создайте пользователя и добавьте его в базу данных
+        //    var newUser = _userService.CreateUser(name);
 
-            // Здесь можно создать и вернуть JWT-токен для нового пользователя
-            var token = _jwtTokenService.GenerateToken(newUser.UserName);
+        //    // Здесь можно создать и вернуть JWT-токен для нового пользователя
+        //    var token = _jwtTokenService.GenerateToken(newUser.UserName);
 
-            return Ok(token);
-        }
-        [Authorize]
+        //    return Ok(token);
+        //}
+     //   [Authorize]
         [HttpPost]
         public ActionResult<UserDTO> CreateUser(string name)
         {
             // Получите JWT-токен из заголовка запроса
-            var jwtToken = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+   //         var jwtToken = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
 
             // Проверьте аутентификацию с использованием JWT-токена
-                     bool isAuthenticated = _jwtTokenService.ValidateToken(jwtToken);
+       //              bool isAuthenticated = _jwtTokenService.ValidateToken(jwtToken);
 
-            if (isAuthenticated)
-            {
+       //     if (isAuthenticated)
+      //      {
                 // Аутентификация успешна, создайте пользователя
                 var createdUser = _userService.CreateUser(name);
 
@@ -52,27 +52,27 @@ namespace Chat_application.Controllers
                 }
                 else
                 {
-                    return BadRequest("User creation failed.");
+                    return BadRequest("Users creation failed.");
                 }
-            }
-            else
-            {
+        //    }
+       //     else
+       //     {
                 // Ошибка аутентификации
-                return Unauthorized("Authentication failed.");
-            }
+       //         return Unauthorized("Authentication failed.");
+       //     }
         }
 
-        [Authorize]
+     //   [Authorize]
         [HttpDelete("{userId}")]
         public IActionResult DeleteUser(int userId)
         {
             if (_userService.DeleteUser(userId))
             {
-                return Ok("User deleted successfully.");
+                return Ok("Users deleted successfully.");
             }
             else
             {
-                return NotFound("User not found or you don't have permission to delete.");
+                return NotFound("Users not found or you don't have permission to delete.");
             }
         }
      //   [Authorize]
@@ -95,7 +95,7 @@ namespace Chat_application.Controllers
             }
             else
             {
-                return NotFound("User not found.");
+                return NotFound("Users not found.");
             }
         }
     }

@@ -5,29 +5,29 @@ namespace DataAccessLayer.Repository.generic
 {
     public class MessageRepository : BaseRepository<MessageEntity>, IMessageRepository
     {
-        public MessageRepository(Context context) : base(context)
+        public MessageRepository(ChatDbContext context) : base(context)
         {
         }
-        public IEnumerable<MessageEntity> GetMessageChatById(int chatId)
-        {
-            if (chatId <= 0)
-            {
-                throw new ChatInvalidInputException("Invalid input parameters.");
-            }
+        //public IEnumerable<MessageEntity> GetMessageChatById(int chatId)
+        //{
+        //    if (chatId <= 0)
+        //    {
+        //        throw new ChatInvalidInputException("Invalid input parameters.");
+        //    }
 
-            var messages = _context.Participants
-                .Where(p => p.ChatId == chatId)
-                .SelectMany(p => p.Messages)
-                .OrderBy(m => m.Timestamp)
-                .ToList();
+        //    var messages = _context.Participants
+        //        .Where(p => p.ChatId == chatId)
+        //        .SelectMany(p => p.Messages)
+        //        .OrderBy(m => m.Timestamp)
+        //        .ToList();
 
-            if (messages == null || !messages.Any())
-            {
-                throw new ChatNotFoundException("Messages not found.");
-            }
+        //    if (messages == null || !messages.Any())
+        //    {
+        //        throw new ChatNotFoundException("Messages not found.");
+        //    }
 
-            return messages;
-        }
+        //    return messages;
+        //}
 
         public bool DeleteMessage(int messageId, int participantId)
         {
@@ -36,7 +36,7 @@ namespace DataAccessLayer.Repository.generic
                 throw new ChatInvalidInputException("Invalid input parameters.");
             }
 
-            var messageEntity = _context.Message.FirstOrDefault(m => m.Id == messageId);
+            var messageEntity = _context.Messages.FirstOrDefault(m => m.Id == messageId);
 
             if (messageEntity == null)
             {
@@ -48,15 +48,10 @@ namespace DataAccessLayer.Repository.generic
                 return false;
             }
 
-            _context.Message.Remove(messageEntity);
+            _context.Messages.Remove(messageEntity);
             _context.SaveChanges();
 
             return true;
-        }
-        public override bool IsValidEntity(MessageEntity message)
-        {
-            // Добавьте свои специфические проверки
-            return !string.IsNullOrEmpty(message.Content) && message.ParticipantId > 0;
         }
     }
 }

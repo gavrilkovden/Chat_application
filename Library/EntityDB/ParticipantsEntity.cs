@@ -1,6 +1,8 @@
-﻿namespace DataAccessLayer.EntityDB
+﻿using DataAccessLayer.Repository.generic;
+
+namespace DataAccessLayer.EntityDB
 {
-    public class ParticipantsEntity
+    public class ParticipantsEntity : BaseEntity
     {
         public int Id { get; set; }
         public int UserId { get; set; }

@@ -9,6 +9,7 @@ namespace BusinessLogic.Services
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        //     private readonly IMessageRepository _messageRepository;
 
         public UserService(IUserRepository userRepository)
         {
@@ -17,7 +18,7 @@ namespace BusinessLogic.Services
 
         public UserDTO CreateUser(string name)
         {
-        var newUser = _userRepository.Create( new UserEntity { UserName = name });
+            var newUser = _userRepository.Create(new UserEntity { UserName = name });
 
             //Creating a UserDTO based on a new user
             var userDTO = new UserDTO
@@ -28,20 +29,21 @@ namespace BusinessLogic.Services
 
             return userDTO;
         }
+
         public bool DeleteUser(int userId)
         {
-            return _userRepository.DeleteUser(userId);
+            return _userRepository.Delete(userId);
         }
 
         public IEnumerable<UserDTO> GetAllUsers()
         {
-          var users = _userRepository.GetAll();
+            var users = _userRepository.GetAll();
             var userDTOs = users.Select(userEntity => new UserDTO
             {
                 Id = userEntity.Id,
                 UserName = userEntity.UserName,
             });
-
+            //           var users1 = _messageRepository.GetMessageChatById(1);
             return userDTOs;
         }
 
@@ -49,7 +51,7 @@ namespace BusinessLogic.Services
         {
             var userEntity = _userRepository.GetById(userId);
 
-             var userDTO = new UserDTO
+            var userDTO = new UserDTO
             {
                 Id = userEntity.Id,
                 UserName = userEntity.UserName,

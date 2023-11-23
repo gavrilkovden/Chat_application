@@ -8,12 +8,13 @@ using System.Text;
 using Microsoft.OpenApi.Models;
 using DataAccessLayer.EntityDB;
 using DataAccessLayer.Repository.generic;
+using DataAccessLayer.Repository.generic.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.json");
 
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<Context>(options => { options.UseSqlServer(connectionString); });
+builder.Services.AddDbContext<ChatDbContext>(options => { options.UseSqlServer(connectionString); });
 
 builder.Services.AddControllers();
 
@@ -23,6 +24,9 @@ builder.Services.AddScoped<IParticipantsService, ParticipantsService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IMessageRepository, MessageRepository>();
+builder.Services.AddScoped<IChatRepository, ChatRepository>();
+builder.Services.AddScoped<IParticipantsRepository, ParticipantsRepository>();
 
 
 // Добавьте аутентификацию и авторизацию

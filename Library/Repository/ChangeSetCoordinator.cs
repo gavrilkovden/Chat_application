@@ -6,11 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Repository
 {
-    public interface IRepository<T>
+    public class ChangeSetCoordinator
     {
-        T Create(T entity);
-        T GetById(int id);
-        IEnumerable<T> GetAll();
-        bool IsValidEntity(T entity);
     }
 }

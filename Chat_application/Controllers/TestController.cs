@@ -33,7 +33,7 @@ namespace Chat_application.Controllers
                 }
             }
 
-            return BadRequest("User creation failed.");
+            return BadRequest("Users creation failed.");
         }
     }
 

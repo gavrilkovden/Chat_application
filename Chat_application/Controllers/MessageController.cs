@@ -46,7 +46,7 @@ namespace Chat_application.Controllers
                 var result = _messageService.DeleteMessage(messageId, participantId);
                 if (!result)
                 {
-                    return NotFound("Message not found or you don't have permission to delete it.");
+                    return NotFound("Messages not found or you don't have permission to delete it.");
                 }
                 return NoContent();
         }

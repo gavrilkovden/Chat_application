@@ -1,5 +1,6 @@
 ﻿using BusinessLogic.DTO;
 using BusinessLogic.Interfaces;
+using Chat_application.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Chat_application.Controllers
@@ -45,5 +46,11 @@ namespace Chat_application.Controllers
         }
 
 
+        //[HttpGet("participantId")]
+        //public IActionResult GetmessageId(int Id)
+        //{
+        //    var participant = _participantsService.GetParticipantId(Id);
+        //    return Ok(participant);
+        //}
     }
 }

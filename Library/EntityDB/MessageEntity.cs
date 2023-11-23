@@ -1,6 +1,8 @@
-﻿namespace DataAccessLayer.EntityDB
+﻿using DataAccessLayer.Repository.generic;
+
+namespace DataAccessLayer.EntityDB
 {
-    public class MessageEntity
+    public class MessageEntity : BaseEntity
     {
         public int Id { get; set; }
         public string Content { get; set; }

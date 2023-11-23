@@ -4,17 +4,17 @@
 
 namespace DataAccessLayer.EntityDB
 {
-    public class Context : DbContext
+    public class ChatDbContext : DbContext
     {
 
-        public Context(DbContextOptions<Context> options) : base(options) { }
+        public ChatDbContext(DbContextOptions<ChatDbContext> options) : base(options) { }
 
 
-        public virtual DbSet<ChatEntity> Chat { get; set; }
+        public virtual DbSet<ChatEntity> Chats { get; set; }
 
-        public virtual DbSet<MessageEntity> Message { get; set; }
+        public virtual DbSet<MessageEntity> Messages { get; set; }
 
-        public virtual DbSet<UserEntity> User { get; set; }
+        public virtual DbSet<UserEntity> Users { get; set; }
         
         public virtual DbSet<ParticipantsEntity> Participants { get; set; }
 
@@ -26,7 +26,7 @@ namespace DataAccessLayer.EntityDB
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Id).HasColumnType("int");
                 entity.Property(e => e.ChatName).HasColumnType("nvarchar(50)");
-                entity.ToTable("Chat");
+                entity.ToTable("Chats");
             });
 
             modelBuilder.Entity<MessageEntity>(entity =>
@@ -35,7 +35,7 @@ namespace DataAccessLayer.EntityDB
                 entity.Property(e => e.Id).HasColumnType("int");
                 entity.Property(e => e.Content).HasColumnType("nvarchar(50)");
                 entity.Property(e => e.Timestamp).HasColumnType("DateTime");
-                entity.ToTable("Message");
+                entity.ToTable("Messages");
             });
 
             modelBuilder.Entity<UserEntity>(entity =>
@@ -44,7 +44,7 @@ namespace DataAccessLayer.EntityDB
                 entity.Property(e => e.Id).HasColumnType("int");
                 entity.Property(e => e.UserName).HasColumnType("nvarchar(50)");
                 entity.HasIndex(e => e.UserName).IsUnique(); // Создание уникального индекса
-                entity.ToTable("User");
+                entity.ToTable("Users");
             });
 
             modelBuilder.Entity<ParticipantsEntity>(entity =>
