@@ -47,20 +47,5 @@ namespace BusinessLogic.Services
         {
             return _participantsRepository.LeaveChat(chatId, userId);
         }
-
-        //public ParticipantsDTO GetParticipantId(int id)
-        //{
-        //    var participant = _participantsRepository.GetMessageId(id);
-
-        //    var participantEntityDTO = new ParticipantsDTO
-        //    {
-        //        UserId = participant.UserId,
-        //        ChatId = participant.ChatId
-        //    };
-
-        //    return participantEntityDTO;
-
-
-        
     }
 }

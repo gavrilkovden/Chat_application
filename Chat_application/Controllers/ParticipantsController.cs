@@ -23,7 +23,6 @@ namespace Chat_application.Controllers
             return Ok(chatDTO); 
         }
 
-        // GET: getting all participants for the selected chat
         [HttpGet("chat/{chatId}")]
         public IActionResult GetChatParticipants(int chatId)
         {
@@ -44,13 +43,5 @@ namespace Chat_application.Controllers
                 return BadRequest("Unable to disconnect from the chat."); 
             }
         }
-
-
-        //[HttpGet("participantId")]
-        //public IActionResult GetmessageId(int Id)
-        //{
-        //    var participant = _participantsService.GetParticipantId(Id);
-        //    return Ok(participant);
-        //}
     }
 }

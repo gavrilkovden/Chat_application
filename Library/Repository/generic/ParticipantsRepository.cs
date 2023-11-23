@@ -15,22 +15,6 @@ namespace DataAccessLayer.Repository.generic
         {
         }
 
-        //public IEnumerable<ParticipantsEntity> GetChatParticipants(int chatId)
-        //{
-        //    if (chatId <= 0)
-        //    {
-        //               throw new ChatInvalidInputException("Invalid input parameters.");
-        //    }
-        //    var participants = _context.Participants
-        //        .Where(p => p.ChatId == chatId)
-        //        .ToList();
-        //    if (participants == null)
-        //    {
-        //            throw new ChatNotFoundException("Participants not found");
-        //    }
-        //    return participants;
-        //}
-
         public ParticipantsEntity ConnectToChat(int chatId, int userId)
         {
             if (chatId <= 0 || userId <= 0)
@@ -108,18 +92,5 @@ namespace DataAccessLayer.Repository.generic
 
             return true; // The user has successfully left the chat
         }
-        // Добавить этот метод в контроллер и посмотреть будут ли подгружаться сообщения и без метода include
-        public ParticipantsEntity GetMessageId(int id)
-        {
-            var entity = _context.Participants.Include(p => p.Messages).FirstOrDefault(m => m.Id == id);
-
-            if (entity == null)
-            {
-                throw new ChatNotFoundException("Not found");
-            }
-
-            return entity;
-        }
-
-    }
+     }
 }

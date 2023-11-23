@@ -85,12 +85,5 @@ namespace DataAccessLayer.Repository.generic
 
             return true;
         }
-
-        //public IEnumerable<ChatEntity> SearchChats(string query)
-        //{
-        //    var chats = _context.Chats.Where(c => c.ChatName.Contains(query)).ToList();
-
-        //    return chats;
-        //}
     }
 }

@@ -12,6 +12,5 @@ namespace DataAccessLayer.Repository.generic
     //    IEnumerable<ParticipantsEntity> GetChatParticipants(int chatId);
         ParticipantsEntity ConnectToChat(int chatId, int userId);
         bool LeaveChat(int chatId, int userId);
-        public ParticipantsEntity GetMessageId(int id);
     }
 }

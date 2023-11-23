@@ -27,23 +27,6 @@ namespace DataAccessLayer.Repository
             return entity;
         }
 
-        //public T GetById(int id)
-        //{
-        //    if (id <= 0)
-        //    {
-        //        throw new ChatInvalidInputException("Invalid input parameters.");
-        //    }
-        //    //  receive a message with the specified identifier
-        //    var entity = _context.Set<T>().Find(id);
-
-        //    if (entity == null)
-        //    {
-        //        throw new ChatNotFoundException("Not found");
-        //    }
-
-        //    return entity;
-        //}
-
         public T GetById(int id, Func<IQueryable<T>, IQueryable<T>> include = null)
         {
             if (id <= 0)
@@ -51,16 +34,13 @@ namespace DataAccessLayer.Repository
                 throw new ChatInvalidInputException("Invalid input parameters.");
             }
 
-            // Исходный запрос
             var query = _context.Set<T>().AsQueryable();
 
-            // Применяем включение, если оно предоставлено
             if (include != null)
             {
                 query = include(query);
             }
 
-            // Получаем сообщение с указанным идентификатором
             var entity = query.FirstOrDefault(m => m.Id == id);
 
             if (entity == null)
@@ -70,18 +50,6 @@ namespace DataAccessLayer.Repository
 
             return entity;
         }
-
-        //public IEnumerable<T> GetAll()
-        //{
-        //    var listEntity = _context.Set<T>().ToList();
-
-        //    if (listEntity.Count == 0)
-        //    {
-        //        throw new ChatNotFoundException("Not found");
-        //    }
-
-        //    return listEntity;
-        //}
 
         public IEnumerable<T> GetAll(Func<IQueryable<T>, IQueryable<T>> include = null)
         {
@@ -98,19 +66,6 @@ namespace DataAccessLayer.Repository
 
             return listEntity;
         }
-
-
-        //public IEnumerable<T> GetAll(Expression<Func<T, bool>> filter)
-        //{
-        //    var listEntity = _context.Set<T>().Where(filter).ToList();
-
-        //    if (listEntity.Count == 0)
-        //    {
-        //        throw new ChatNotFoundException("Not found");
-        //    }
-
-        //    return listEntity;
-        //}
 
         public IEnumerable<T> GetAll(Expression<Func<T, bool>> filter, Func<IQueryable<T>, IQueryable<T>> include = null)
         {
@@ -149,7 +104,5 @@ namespace DataAccessLayer.Repository
 
             return true;
         }
-
-
     }
 }
