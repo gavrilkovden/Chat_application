@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessLogic.Exceptions
+namespace ExceptionHandling.Exceptions
 {
-    public class NotFoundException: Exception
+    public class ChatNotFoundException: Exception
     {
-        public NotFoundException(string message)
+        public ChatNotFoundException(string message)
     : base(message) { }
     }
 }

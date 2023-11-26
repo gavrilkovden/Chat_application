@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessLogic.Exceptions
+namespace ExceptionHandling.Exceptions
 {
-    public class InvalidInputException : Exception
+    public class ChatInvalidInputException : Exception
     {
-        public InvalidInputException(string message)
+        public ChatInvalidInputException(string message)
    : base(message) { }
     }
 }

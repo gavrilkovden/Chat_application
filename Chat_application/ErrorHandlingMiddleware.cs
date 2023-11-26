@@ -1,4 +1,5 @@
-﻿using BusinessLogic.Exceptions;
+﻿
+using ExceptionHandling.Exceptions;
 using Newtonsoft.Json;
 using System.Net;
 
@@ -19,30 +20,35 @@ namespace Chat_application
             {
                 await _next(context);
             }
-            catch (InvalidInputException ex)
-            {
-                context.Response.ContentType = "application/json";
-                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-
-                var errorMessage = ex.Message;
-                await context.Response.WriteAsync(errorMessage);
-            }
-            catch (NotFoundException ex)
-            {
-                context.Response.ContentType = "application/json";
-                context.Response.StatusCode = (int)HttpStatusCode.NotFound;
-
-                var errorMessage = ex.Message;
-                await context.Response.WriteAsync(errorMessage);
-            }
             catch (Exception ex)
             {
-                context.Response.ContentType = "application/json";
+                await HandleExceptionAsync(context, ex);
+            }
+        }
+
+        private async Task HandleExceptionAsync(HttpContext context, Exception ex)
+        {
+            SetErrorResponse(context, ex);
+
+            var errorMessage = ex.Message;
+            await context.Response.WriteAsync(errorMessage);
+        }
+
+        private void SetErrorResponse(HttpContext context, Exception ex)
+        {
+            context.Response.ContentType = "application/json";
+
+            if (ex is ChatInvalidInputException)
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            }
+            else if (ex is ChatNotFoundException)
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+            }
+            else
+            {
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-
-                var errorMessage = ex.Message;
-                await context.Response.WriteAsync(errorMessage);
-
             }
         }
     }

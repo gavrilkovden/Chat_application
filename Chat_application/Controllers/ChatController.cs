@@ -1,6 +1,4 @@
-﻿using Azure.Core;
-using BusinessLogic.DTO;
-using BusinessLogic.Exceptions;
+﻿using BusinessLogic.DTO;
 using BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 

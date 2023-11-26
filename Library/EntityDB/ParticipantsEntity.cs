@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DataAccessLayer.Repository.generic;
 
 namespace DataAccessLayer.EntityDB
 {
-    public class ParticipantsEntity
+    public class ParticipantsEntity : BaseEntity
     {
         public int Id { get; set; }
         public int UserId { get; set; }

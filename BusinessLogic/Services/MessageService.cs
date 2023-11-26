@@ -1,38 +1,23 @@
 ﻿using BusinessLogic.DTO;
-using BusinessLogic.Exceptions;
 using BusinessLogic.Interfaces;
 using DataAccessLayer.EntityDB;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using DataAccessLayer.Repository.generic;
+using DataAccessLayer.Repository.generic.Interfaces;
 
 namespace BusinessLogic.Services
 {
     public class MessageService : IMessageService
     {
-        private readonly Context _context;
+        private readonly IMessageRepository _messageRepository;
 
-        public MessageService(Context context)
+        public MessageService(IMessageRepository messageRepository)
         {
-            _context = context;
+            _messageRepository = messageRepository;
         }
 
         public MessageDTO CreateMessage(string content, int participantId)
         {
-            if (string.IsNullOrEmpty(content) || participantId <= 0)
-            {
-                throw new InvalidInputException("Invalid input parameters.");
-            }
-            var messageEntity = new MessageEntity
-            {
-                Content = content,
-                ParticipantId = participantId 
-            };
-
-            _context.DALMessage.Add(messageEntity);
-            _context.SaveChanges();
+            var messageEntity = _messageRepository.Create(new MessageEntity { Content = content, ParticipantId = participantId });
 
             var messageDTO = new MessageDTO
             {
@@ -47,17 +32,8 @@ namespace BusinessLogic.Services
 
         public MessageDTO GetMessage(int messageId)
         {
-            if (messageId <= 0)
-            {
-                throw new InvalidInputException("Invalid input parameters.");
-            }
-            //  receive a message with the specified identifier
-            var messageEntity = _context.DALMessage.FirstOrDefault(m => m.Id == messageId);
-
-            if (messageEntity == null)
-            {
-                throw new NotFoundException("Message not found");
-            }
+            
+            var messageEntity = _messageRepository.GetById(messageId);
 
             var messageDTO = new MessageDTO
             {
@@ -72,20 +48,9 @@ namespace BusinessLogic.Services
 
         public IEnumerable<MessageDTO> GetChatMessages(int chatId)
         {
-            if (chatId <= 0)
-            {
-                throw new InvalidInputException("Invalid input parameters.");
-            }
-            var messages = _context.DALParticipants
-                .Where(p => p.ChatId == chatId)
-                .SelectMany(p => p.Messages)
-                .OrderBy(m => m.Timestamp)
-                .ToList();
 
-            if (messages == null)
-            {
-                throw new NotFoundException("Messages not found");
-            }
+            var messages = _messageRepository.GetAll(p => p.Participant.ChatId == chatId).OrderBy(m => m.Timestamp).ToList();
+
             var messageDTOs = messages.Select(messageEntity => new MessageDTO
             {
                 Id = messageEntity.Id,
@@ -99,27 +64,7 @@ namespace BusinessLogic.Services
 
         public bool DeleteMessage(int messageId, int participantId)
         {
-            if (messageId <= 0 || participantId <= 0)
-            {
-                throw new InvalidInputException("Invalid input parameters.");
-            }
-            // search for a message with the specified ID
-            var messageEntity = _context.DALMessage.FirstOrDefault(m => m.Id == messageId);
-
-            if (messageEntity == null)
-            {
-                return false;
-            }
-
-            // checking that the current user has the right to delete the message (only the one who wrote it)
-            if (messageEntity.ParticipantId != participantId)
-            {
-                return false;
-            }
-            _context.DALMessage.Remove(messageEntity);
-            _context.SaveChanges();
-
-            return true;
+            return _messageRepository.DeleteMessage(messageId, participantId);
         }
     }
 }

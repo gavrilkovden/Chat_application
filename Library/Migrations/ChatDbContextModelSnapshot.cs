@@ -4,23 +4,20 @@ using DataAccessLayer.EntityDB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
 namespace DataAccessLayer.Migrations
 {
-    [DbContext(typeof(Context))]
-    [Migration("20231011130032_InitialCreate")]
-    partial class InitialCreate
+    [DbContext(typeof(ChatDbContext))]
+    partial class ChatDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.11")
+                .HasAnnotation("ProductVersion", "7.0.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -39,7 +36,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Chat", (string)null);
+                    b.ToTable("Chats", (string)null);
                 });
 
             modelBuilder.Entity("DataAccessLayer.EntityDB.MessageEntity", b =>
@@ -64,7 +61,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasIndex("ParticipantId");
 
-                    b.ToTable("Message", (string)null);
+                    b.ToTable("Messages", (string)null);
                 });
 
             modelBuilder.Entity("DataAccessLayer.EntityDB.ParticipantsEntity", b =>
@@ -108,7 +105,10 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("User", (string)null);
+                    b.HasIndex("UserName")
+                        .IsUnique();
+
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("DataAccessLayer.EntityDB.MessageEntity", b =>
