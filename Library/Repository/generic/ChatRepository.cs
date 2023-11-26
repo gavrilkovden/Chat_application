@@ -12,7 +12,7 @@ namespace DataAccessLayer.Repository.generic
 {
     public class ChatRepository : BaseRepository<ChatEntity>, IChatRepository
     {
-        public ChatRepository(ChatDbContext context) : base(context)
+        public ChatRepository(ChatDbContext context, IUnitOfWork unitOfWork) : base(context, unitOfWork)
         {
         }
         public ChatEntity CreateChat(string name, int userId)
@@ -85,5 +85,12 @@ namespace DataAccessLayer.Repository.generic
 
             return true;
         }
+
+        //public IEnumerable<ChatEntity> SearchChats(string query)
+        //{
+        //    var chats = _context.Chats.Where(c => c.ChatName.Contains(query)).ToList();
+
+        //    return chats;
+        //}
     }
 }

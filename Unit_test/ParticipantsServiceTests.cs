@@ -112,7 +112,7 @@
 //            var participantsService = new ParticipantsService(contextMock.Object);
 
 //            // Act
-//            var participants = participantsService.ConnectToChat(chatId, userId);
+//            var participants = participantsService.Create(chatId, userId);
 
 //            // Assert
 //            Assert.NotNull(participants);
@@ -174,7 +174,7 @@
 
 //            // Act and Assert
 
-//            Assert.Throws<ChatNotFoundException>(() => participantsService.ConnectToChat(chatId, userId));
+//            Assert.Throws<ChatNotFoundException>(() => participantsService.Create(chatId, userId));
 
 //        }
 //        [Fact]
@@ -230,7 +230,7 @@
 //            var participantsService = new ParticipantsService(contextMock.Object);
 
 //            // Act and Assert
-//            Assert.True(participantsService.LeaveChat(chatId, userId));
+//            Assert.True(participantsService.Delete(chatId, userId));
 //        }
 
 //        [Fact]
@@ -286,7 +286,7 @@
 //            var participantsService = new ParticipantsService(contextMock.Object);
 
 //            // Act and Assert
-//            Assert.Throws<ChatNotFoundException>(() => participantsService.LeaveChat(chatId, userId));
+//            Assert.Throws<ChatNotFoundException>(() => participantsService.Delete(chatId, userId));
 //        }
 //    }
 //}

@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer.EntityDB;
+using DataAccessLayer.Repository.generic.Interfaces;
 using ExceptionHandling.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,11 +12,11 @@ namespace DataAccessLayer.Repository.generic
 {
     public class ParticipantsRepository : BaseRepository<ParticipantsEntity>, IParticipantsRepository
     {
-        public ParticipantsRepository(ChatDbContext context) : base(context)
+        public ParticipantsRepository(ChatDbContext context, IUnitOfWork unitOfWork) : base(context, unitOfWork)
         {
         }
 
-        public ParticipantsEntity ConnectToChat(int chatId, int userId)
+        public  ParticipantsEntity Create(int chatId, int userId)
         {
             if (chatId <= 0 || userId <= 0)
             {
@@ -41,12 +42,11 @@ namespace DataAccessLayer.Repository.generic
             };
 
             _context.Participants.Add(participantEntity);
-            _context.SaveChanges();
 
             return participantEntity;
         }
 
-        public bool LeaveChat(int chatId, int userId)
+        public bool Delete(int chatId, int userId)
         {
             if (chatId <= 0 || userId <= 0)
             {
@@ -70,16 +70,6 @@ namespace DataAccessLayer.Repository.generic
                 throw new ChatNotFoundException("Users not found.");
             }
 
-            // Checking whether the user has the right to leave the chat
-            var isUserAdmin = _context.Participants.Any(p =>
-                p.ChatId == chatEntity.Id && p.UserId == userEntity.Id && p.IsAdmin);
-
-            if (isUserAdmin)
-            {
-                // The user cannot leave the chat
-                return false;
-            }
-
             // Deleting a user record from the Participants Entity table associated with a chat
             var participantEntity = _context.Participants
                 .FirstOrDefault(p => p.ChatId == chatId && p.UserId == userId);
@@ -87,10 +77,15 @@ namespace DataAccessLayer.Repository.generic
             if (participantEntity != null)
             {
                 _context.Participants.Remove(participantEntity);
-                _context.SaveChanges();
             }
 
             return true; // The user has successfully left the chat
         }
-     }
+
+        public bool IsUserAdmin(int chatId, int userId)
+        {
+            return _context.Participants.Any(p =>
+                p.ChatId == chatId && p.UserId == userId && p.IsAdmin);
+        }
+    }
 }

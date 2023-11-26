@@ -23,7 +23,7 @@ namespace Chat_application.Controllers
             return Ok(chatDTO); 
         }
 
-        [HttpGet("chat/{chatId}")]
+        [HttpGet("chats/{chatId}/participants")]
         public IActionResult GetChatParticipants(int chatId)
         {
                 var participants = _participantsService.GetChatParticipants(chatId);

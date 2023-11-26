@@ -2,6 +2,7 @@
 using BusinessLogic.Interfaces;
 using DataAccessLayer.EntityDB;
 using DataAccessLayer.Repository.generic;
+using DataAccessLayer.Repository.generic.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
@@ -10,10 +11,12 @@ namespace BusinessLogic.Services
     public class ParticipantsService : IParticipantsService
     {
         private readonly IParticipantsRepository _participantsRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public ParticipantsService(IParticipantsRepository participantsRepository)
+        public ParticipantsService(IParticipantsRepository participantsRepository, IUnitOfWork unitOfWork)
         {
             _participantsRepository = participantsRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public IEnumerable<ParticipantsDTO> GetChatParticipants(int chatId)
@@ -32,7 +35,7 @@ namespace BusinessLogic.Services
 
         public ParticipantsDTO ConnectToChat(int chatId, int userId)
         {
-            var participant = _participantsRepository.ConnectToChat(chatId, userId);
+            var participant = _participantsRepository.Create(chatId, userId);
 
             var participantEntityDTO = new ParticipantsDTO
             {
@@ -40,12 +43,28 @@ namespace BusinessLogic.Services
                 ChatId = participant.ChatId
             };
 
+            // Save changes in the unit of work
+            _unitOfWork.SaveChanges();
+
             return participantEntityDTO;
         }
 
         public bool LeaveChat(int chatId, int userId)
         {
-            return _participantsRepository.LeaveChat(chatId, userId);
+            var isUserAdmin = _participantsRepository.IsUserAdmin(chatId, userId);
+
+            if (isUserAdmin)
+            {
+                return false;
+            }
+
+            var result = _participantsRepository.Delete(chatId, userId);
+
+            // Save changes in the unit of work
+            _unitOfWork.SaveChanges();
+
+            return result;
         }
     }
+
 }

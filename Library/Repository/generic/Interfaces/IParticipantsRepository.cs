@@ -10,7 +10,8 @@ namespace DataAccessLayer.Repository.generic
     public interface IParticipantsRepository : IRepository<ParticipantsEntity>
     {
     //    IEnumerable<ParticipantsEntity> GetChatParticipants(int chatId);
-        ParticipantsEntity ConnectToChat(int chatId, int userId);
-        bool LeaveChat(int chatId, int userId);
+        ParticipantsEntity Create(int chatId, int userId);
+        bool Delete(int chatId, int userId);
+        bool IsUserAdmin(int chatId, int userId);
     }
 }

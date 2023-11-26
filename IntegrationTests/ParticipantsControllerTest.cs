@@ -47,7 +47,7 @@
 //                var controller = new ParticipantsController(participantsService);
 
 //                // Act
-//                var result = controller.ConnectToChat(chatId, userId);
+//                var result = controller.Create(chatId, userId);
 
 //                // Assert
 //                Assert.IsInstanceOf<OkObjectResult>(result.Result);

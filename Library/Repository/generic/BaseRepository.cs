@@ -1,5 +1,6 @@
 ﻿using DataAccessLayer.EntityDB;
 using DataAccessLayer.Repository.generic;
+using DataAccessLayer.Repository.generic.Interfaces;
 using ExceptionHandling.Exceptions;
 using System.Linq.Expressions;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
@@ -9,13 +10,16 @@ namespace DataAccessLayer.Repository
     public class BaseRepository<T> : IRepository<T> where T : BaseEntity
     {
         protected readonly ChatDbContext _context;
+        protected readonly IUnitOfWork _unitOfWork;
 
-        public BaseRepository(ChatDbContext context)
+
+        public BaseRepository(ChatDbContext context, IUnitOfWork unitOfWork)
         {
             _context = context;
+            _unitOfWork = unitOfWork;
         }
 
-        public T Create(T entity)
+        public virtual T Create(T entity)
         {
             if (entity == null)
             {
@@ -23,7 +27,6 @@ namespace DataAccessLayer.Repository
             }
 
             _context.Set<T>().Add(entity);
-            _context.SaveChanges();
             return entity;
         }
 
@@ -34,52 +37,23 @@ namespace DataAccessLayer.Repository
                 throw new ChatInvalidInputException("Invalid input parameters.");
             }
 
-            var query = _context.Set<T>().AsQueryable();
-
-            if (include != null)
-            {
-                query = include(query);
-            }
+            var query = _context.Set<T>().AsQueryable().ApplyInclude(include);
 
             var entity = query.FirstOrDefault(m => m.Id == id);
-
-            if (entity == null)
-            {
-                throw new ChatNotFoundException("Not found");
-            }
 
             return entity;
         }
 
         public IEnumerable<T> GetAll(Func<IQueryable<T>, IQueryable<T>> include = null)
         {
-            var listEntity = _context.Set<T>().AsQueryable();
-
-            if (include != null)
-            {
-                listEntity = include(listEntity);
-            }
-            if (listEntity == null)
-            {
-                throw new ChatNotFoundException("Not found");
-            }
+            var listEntity = _context.Set<T>().AsQueryable().ApplyInclude(include);
 
             return listEntity;
         }
 
         public IEnumerable<T> GetAll(Expression<Func<T, bool>> filter, Func<IQueryable<T>, IQueryable<T>> include = null)
         {
-            var listEntity = _context.Set<T>().Where(filter).AsQueryable();
-
-            if (include != null)
-            {
-                listEntity = include(listEntity);
-            }
-
-            if (listEntity == null)
-            {
-                throw new ChatNotFoundException("Not found");
-            }
+            var listEntity = _context.Set<T>().Where(filter).AsQueryable().ApplyInclude(include);
 
             return listEntity;
         }
@@ -100,9 +74,21 @@ namespace DataAccessLayer.Repository
             }
 
             _context.Set<T>().Remove(entity);
-            _context.SaveChanges();
 
             return true;
+        }
+
+        public void SaveChanges()
+        {
+            _unitOfWork.SaveChanges();
+        }
+    }
+
+    public static class RepositoryExtensions
+    {
+        public static IQueryable<T> ApplyInclude<T>(this IQueryable<T> query, Func<IQueryable<T>, IQueryable<T>> include)
+        {
+            return include != null ? include(query) : query;
         }
     }
 }

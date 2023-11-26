@@ -1,11 +1,12 @@
 ﻿using DataAccessLayer.EntityDB;
+using DataAccessLayer.Repository.generic.Interfaces;
 using ExceptionHandling.Exceptions;
 
 namespace DataAccessLayer.Repository.generic
 {
     public class MessageRepository : BaseRepository<MessageEntity>, IMessageRepository
     {
-        public MessageRepository(ChatDbContext context) : base(context)
+        public MessageRepository(ChatDbContext context, IUnitOfWork unitOfWork) : base(context, unitOfWork)
         {
         }
         //public IEnumerable<MessageEntity> GetMessageChatById(int chatId)
